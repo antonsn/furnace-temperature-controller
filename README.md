@@ -1,6 +1,10 @@
 # furnace-temperature-controller
 
+## Hardware
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
+[![video](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
+
+![photo](/furnace.jpg)
+
 
 I will add info ASAP
