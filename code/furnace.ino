@@ -4,6 +4,7 @@
 #include <Average.h>
 #include "Adafruit_MAX31855.h"
 #include <math.h>
+#include <PID_v1.h>
 
 class TempInterval
 {
@@ -28,10 +29,8 @@ public:
 const int temperatureSamplesCount = 5;
 
 /*   
- *    Proportional - Calculate how long heater should be ON. For me was a simplest working solution to prevent overshooting.
- *    OnOffSec = max(tempDiff * maxOnTempDiffK, minOnCycleSec);
- *    const int maxOnTempDiffK = 0.3;
- *    if difference is 10 C then OnSec will be 10 * 0.3 = 3 sec  
+ *    PID
+http://playground.arduino.cc/Code/PIDLibraryRelayOutputExample
  *    
  *    TempInterval(from  minute, to  minute, from temp, to temp)
  *    from minute 0 to 7 raise  temperature from 200 to 300
@@ -43,12 +42,18 @@ const int temperatureSamplesCount = 5;
 */
 
 const int atTempDiffStartAdjustTimeOnOff = 20;
-const int maxOnTempDiffK = 0.3;
-const int minOnOffCycleSec = 1; //avoiding switchng too often 
+//Define Variables we'll be connecting to
+double Setpoint, Input, Output;
+
+//Specify the links and initial tuning parameters
+PID myPID(&Input, &Output, &Setpoint,2,1,1, DIRECT);
+
+const int WindowSize = 30000; //sec
+
 
 
 const int mininumMeaningfullTemperatureC = 5;
-const int minAlowedTemperatureChange = 10;
+const int minAlowedTemperatureChange = 10; //per cycle (loop)
 const bool exitOnError = true;
 
 const int TempIntervalCnt = 6;
@@ -77,10 +82,7 @@ enum States
 
 States state;
 
-long offDuration;
-long onDuration;
-int OnOffSec;
-
+unsigned long windowStartTime;
 int currentTemp = 0;
 int targetTemp;
 int currentMinute;
@@ -94,8 +96,6 @@ bool IsOn = false;
 bool switchOn = false;
 
 
-
-
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 const int thermoCLK = 3, thermoCS = 4, thermoDO = 5;
 Adafruit_MAX31855 thermocouple(thermoCLK, thermoCS, thermoDO);
@@ -103,6 +103,14 @@ Adafruit_MAX31855 thermocouple(thermoCLK, thermoCS, thermoDO);
 void setup()
 {
 
+  windowStartTime = millis();
+
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  
   startTime = millis();
   Serial.begin(9600);
 
@@ -157,8 +165,8 @@ void loop()
    //exit and switch off
    switchOn = false; setHeater();
    return;
-   
   }
+    
   currentTemp = avgTemp;
 
   currentMinute = ((millis() - startTime) / 60000) + lastExecutionMinute;
@@ -359,14 +367,6 @@ int readInput()
 void setHeater()
 {
 
-  if (IsOn)
-    lastOnTime = micros();
-  else
-    lastOffTime = micros();
-
-  offDuration = (micros() - lastOnTime) / 1000000;
-  onDuration = (micros() - lastOffTime) / 1000000;
-
   int tempDiff = (targetTemp - currentTemp);
 
   if (tempDiff > atTempDiffStartAdjustTimeOnOff)
@@ -377,32 +377,34 @@ void setHeater()
     else
       switchOn = true;
   }
-  else
+  else //use PID
   {
-    OnOffSec = max(tempDiff * maxOnTempDiffK, minOnOffCycleSec);
+
+    Setpoint = targetTemp;
+    Input = currentTemp;
+    myPID.Compute();
+  
+    unsigned long now = millis();
+    
+    if(now - windowStartTime > WindowSize)
+    { //time to shift the Relay Window
+      windowStartTime += WindowSize;
+    }
+    if(Output > now - windowStartTime) 
+      switchOn = true;
+    else 
+      switchOn = false;
+
+    Serial.println("PID OUTPUT");
+    Serial.print(Output);
   
 
-    if (currentTemp > targetTemp)
-      switchOn = false;
-    else if ((onDuration > OnOffSec && IsOn) || (offDuration < OnOffSec && !IsOn))
-      switchOn = false;
-    else if (currentTemp < targetTemp)
-      switchOn = true;
   }
 
   Serial.println(tempDiff);
-  Serial.print("on");
-  Serial.println(onDuration);
-  Serial.print("maxOnOffsec ");
-  Serial.println(OnOffSec);
   Serial.print("Is on : ");
   Serial.println(switchOn);
 
-  if (switchOn && !IsOn)
-    lastOnTime = micros();
-
-  if (!switchOn && IsOn)
-    lastOffTime = micros();
 
   if (switchOn)
   {
