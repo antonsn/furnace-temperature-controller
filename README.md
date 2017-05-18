@@ -20,7 +20,7 @@ This is acieved by having tempertature intervals.
 
 
 
-###Settings
+### Settings
 
 Setting temperature intervals
 
@@ -40,3 +40,9 @@ TempInterval tempIntervals[TempIntervalCnt] =
 };
 
 ````
+
+Set PID 
+PID myPID(&Input, &Output, &Setpoint,2,1,1, DIRECT);
+Info about PID can be found here https://playground.arduino.cc/Code/PIDLibrary
+
+
