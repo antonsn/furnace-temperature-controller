@@ -2,13 +2,15 @@
 
 ## Hardware
 
+TODO
+
 [![video](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
 
 ![photo](/furnace.jpg)
 
 
 
-###Motivation 
+### Motivation 
 
 For jewelry casting one need to control the furnce temperature as in example below :
 ![photo](/casting.png)
@@ -16,8 +18,7 @@ For jewelry casting one need to control the furnce temperature as in example bel
 This is acieved by having tempertature intervals.
 
 
-### Hadrware 
-TODO
+
 
 ###Settings
 
