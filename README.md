@@ -2,7 +2,13 @@
 
 ## Hardware
 
-TODO
+- Arduino Nano
+- Solid State Relay 40A / 3-32VDC 24-380VAC DC SSR 
+- Stainless Steel High Temperature -100 To 1250 Degree Thermocouple K type 100mm Probe
+- 1602 LCD screen (blue screen) with backlighting
+- Adafruit Thermocouple Amplifier MAX31855 Breakout Board 
+- 2AMP 5v DC, Box
+
 
 [![video](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
 
@@ -46,3 +52,7 @@ PID myPID(&Input, &Output, &Setpoint,2,1,1, DIRECT);
 Info about PID can be found here https://playground.arduino.cc/Code/PIDLibrary
 
 
+
+### TODOs
+- Beep on finish
+- Multiple programms
