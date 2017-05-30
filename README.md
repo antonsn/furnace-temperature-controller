@@ -7,8 +7,9 @@
 - Stainless Steel High Temperature -100 To 1250 Degree Thermocouple K type 100mm Probe
 - 1602 LCD screen (blue screen) with backlighting
 - Adafruit Thermocouple Amplifier MAX31855 Breakout Board 
-- 2AMP 5v DC, Box
+- 2AMP 5v DC, Box, 2 buttons to start-stop programm, wires
 
+Short video on click.     
 
 [![video](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
 
@@ -18,8 +19,8 @@
 For jewelry casting one need to control the furnce temperature as in example below :
 ![photo](/casting.png)
 
-This is acieved by having tempertature intervals.
-
+This is achieved by having tempertature intervals.
+In case of power cut app preserves the state and later asks if you want to continue from the moment when power was cut. 
 
 
 
