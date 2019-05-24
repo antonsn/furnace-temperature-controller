@@ -1,5 +1,16 @@
 # furnace-temperature-controller
 
+
+### Motivation 
+
+For jewelry casting one need to control the furnce temperature as in example below :
+![photo](/casting.png)
+
+This is achieved by having tempertature intervals.
+In case of power cut app preserves the state and later asks if you want to continue from the moment when power was cut. 
+
+
+
 ## Hardware
 
 - Arduino Nano
@@ -12,15 +23,6 @@
 Short video on click.     
 
 [![video](http://img.youtube.com/vi/bsTQhCWisBk/0.jpg)](https://youtu.be/bsTQhCWisBk)
-
-
-### Motivation 
-
-For jewelry casting one need to control the furnce temperature as in example below :
-![photo](/casting.png)
-
-This is achieved by having tempertature intervals.
-In case of power cut app preserves the state and later asks if you want to continue from the moment when power was cut. 
 
 
 
